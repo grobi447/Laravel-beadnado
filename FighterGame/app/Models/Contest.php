@@ -13,7 +13,7 @@ class Contest extends Model
         'history',
     ];
     public function character(){
-        return $this->belongsToMany(Character::class);
+        return $this->belongsToMany(Character::class, 'characters__contests', 'contest_id', 'character_id')->withPivot('hero_hp', 'enemy_hp');
     }
     public function user(){
         return $this->belongsTo(User::class, 'user_id');

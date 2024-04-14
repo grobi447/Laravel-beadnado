@@ -22,6 +22,6 @@ class Character extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
     public function contest(){
-        return $this->belongsToMany(Contest::class);
+        return $this->belongsToMany(Contest::class, 'characters__contests', 'character_id', 'contest_id')->withPivot('hero_hp', 'enemy_hp');
     }
 }
