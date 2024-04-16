@@ -41,7 +41,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            
+                                            <a href="{{ route('characters.show', $character->id) }}" class="button">Character details</a>
                                         </div>
                                     </div>
                                 </div>

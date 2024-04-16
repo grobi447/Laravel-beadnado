@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use App\Models\Character;
 class CharacterController extends Controller
 {
     /**
@@ -21,7 +21,7 @@ class CharacterController extends Controller
      */
     public function create()
     {
-        //
+        return view('character.create');
     }
 
     /**
@@ -37,7 +37,22 @@ class CharacterController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $character = Character::findOrFail($id);
+
+        if (Auth::id() !== $character->user_id) {
+        abort(403, 'Nincs jogosultságod megtekinteni ezt a karaktert!');
+        }
+
+
+        $matches = $character->contest;
+        $PlaceNames = $matches->map(function ($match) {
+            return $match->place->name;
+        });
+        $OpponentNames = $matches->map(function ($match) use ($character) {
+            $opponent = $match->character->firstWhere('id', '!=', $character->id);
+            return $opponent->name;
+        });
+        return view('character.show', ['character' => $character,'PlaceNames' => $PlaceNames, 'OpponentNames' => $OpponentNames]);
     }
 
     /**
@@ -45,7 +60,7 @@ class CharacterController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        return view('character.edit');
     }
 
     /**
@@ -61,6 +76,6 @@ class CharacterController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        return redirect()->route('characters');
     }
 }
