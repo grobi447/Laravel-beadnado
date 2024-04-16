@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Auth;
+use App\Models\Character;
 class ContestController extends Controller
 {
     /**
@@ -17,8 +18,14 @@ class ContestController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create($id)
     {
+        $character = Character::findOrFail($id);
+
+        if (Auth::id() !== $character->user_id) {
+        abort(403, 'Nincs jogosultságod meccset létrehozni ezzel a karakterrel');
+        }
+
         return view('match.create');
     }
 

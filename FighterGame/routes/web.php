@@ -12,9 +12,9 @@ Route::get('/characters/{id}', [CharacterController::class, 'show'])->name('char
 Route::get('/characters/{id}/edit', [CharacterController::class, 'edit'])->name('characters.edit')->middleware('auth');
 Route::get('/characters/{id}/delete', [CharacterController::class, 'destroy'])->name('characters.delete')->middleware('auth');
 
-Route::get('characters/{id}/match', [ContestController::class, 'show'])->name('matches.show')->middleware('auth');
-Route::get('characters/{id}/creatematch', [ContestController::class, 'create'])->name('matches.create')->middleware('auth');
-
+Route::get('match/{id}', [ContestController::class, 'show'])->name('matches.show')->middleware('auth');
+Route::get('match/create', [ContestController::class, 'create'])->name('matches.create')->middleware('auth');
+Route::get('match', [ContestController::class, 'index'])->name('matches')->middleware('auth');
 Auth::routes();
 
 
