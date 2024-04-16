@@ -35,8 +35,7 @@
 
                                     <div class="col-md-6">
                                         <input id="name" type="checkbox" name="enemy"
-                                            @if ($character->enemy) checked @endif
-                                            value="{{ $character->enemy }}">
+                                            @if ($character->enemy) checked @endif value="enemy">
 
                                         @error('enemy')
                                             <span class="invalid-feedback" role="alert">
@@ -46,7 +45,7 @@
                                     </div>
                                 </div>
                             @else
-                                <input type="hidden" name="enemy" value="{{ $character->enemy }}">
+                                <input type="hidden" name="enemy" value="enemy">
                             @endif
 
                             <div class="row mb-3">
@@ -114,7 +113,11 @@
                                     @enderror
                                 </div>
                             </div>
-
+                            @if ($errors->has('totalStats'))
+                                <div class="alert alert-danger">
+                                    {{ $errors->first('totalStats') }}
+                                </div>
+                            @endif
 
                             <div class="row mb-0">
                                 <div class="col-md-6 offset-md-4">

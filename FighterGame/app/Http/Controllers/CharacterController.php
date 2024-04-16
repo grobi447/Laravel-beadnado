@@ -75,9 +75,8 @@ class CharacterController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $request = $request->validate([
+        $request->validate([
             'name' => 'required|string',
-            'enemy' => 'boolean',
             'defence' => 'required|integer|min:0|max:3',
             'strength' => 'required|integer|min:0|max:20',
             'accuracy' => 'required|integer|min:0|max:20',
@@ -103,14 +102,23 @@ class CharacterController extends Controller
             'magic.max' => 'A varázserő legfeljebb 20 lehet!',
 
         ]);
-            $character = Character::find($id);
-            $character->name = $request['name'];
-            $character->enemy = $request['enemy'];
-            $character->defence = $request['defence'];
-            $character->strength = $request['strength'];
-            $character->accuracy = $request['accuracy'];
-            $character->magic = $request['magic'];
-            $character->save();
+
+        $totalStats = $request->defence + $request->strength + $request->accuracy + $request->magic;
+        if ($totalStats > 20) {
+            return redirect()->back()->withInput()->withErrors(['totalStats' => 'A karakter tulajdonságainak összege nem lehet nagyobb, mint 20!']);
+        }
+        $character = Character::find($id);
+        $character->name = $request->name;
+        if ($request->has('enemy')) {
+            $character->enemy = true;
+        } else {
+            $character->enemy = false;
+        }
+        $character->defence = $request->defence;
+        $character->strength = $request->strength;
+        $character->accuracy = $request->accuracy;
+        $character->magic = $request->magic;
+        $character->save();
 
         return redirect()->route('characters.show', ['id' => $id]);
 
