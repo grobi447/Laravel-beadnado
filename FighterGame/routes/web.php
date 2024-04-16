@@ -8,6 +8,8 @@ use App\Http\Controllers\ContestController;
 Route::get('/', [HomeController::class, 'index']);
 
 Route::get('/characters', [CharacterController::class, 'index'])->name('characters')->middleware('auth');
+Route::get('/characters/create', [CharacterController::class, 'create'])->name('characters.create')->middleware('auth');
+Route::post('/characters/create', [CharacterController::class, 'store'])->name('characters.store')->middleware('auth');
 Route::get('/characters/{id}', [CharacterController::class, 'show'])->name('characters.show')->middleware('auth');
 Route::get('/characters/{id}/edit', [CharacterController::class, 'edit'])->name('characters.edit')->middleware('auth');
 Route::put('/characters/{id}/edit', [CharacterController::class, 'update'])->name('characters.update')->middleware('auth');
