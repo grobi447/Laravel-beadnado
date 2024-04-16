@@ -41,10 +41,10 @@ class DatabaseSeeder extends Seeder
         $characters->push(Character::factory()->create([
             'name' => 'AdminCharacter',
             'user_id' => $users->first()->id,
-            'defence' => 10,
-            'strength' => 10,
-            'accuracy' => 10,
-            'magic' => 10,
+            'defence' => 3,
+            'strength' => 6,
+            'accuracy' => 8,
+            'magic' => 3,
             'enemy' => true,
         ]));
 

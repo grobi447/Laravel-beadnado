@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Character;
+
 class CharacterController extends Controller
 {
     /**
@@ -40,7 +41,7 @@ class CharacterController extends Controller
         $character = Character::findOrFail($id);
 
         if (Auth::id() !== $character->user_id) {
-        abort(403, 'Nincs jogosultságod megtekinteni ezt a karaktert!');
+            abort(403, 'Nincs jogosultságod megtekinteni ezt a karaktert!');
         }
 
 
@@ -52,7 +53,7 @@ class CharacterController extends Controller
             $opponent = $match->character->firstWhere('id', '!=', $character->id);
             return $opponent->name;
         });
-        return view('character.show', ['character' => $character,'PlaceNames' => $PlaceNames, 'OpponentNames' => $OpponentNames]);
+        return view('character.show', ['character' => $character, 'PlaceNames' => $PlaceNames, 'OpponentNames' => $OpponentNames]);
     }
 
     /**
@@ -60,7 +61,13 @@ class CharacterController extends Controller
      */
     public function edit(string $id)
     {
-        return view('character.edit');
+        $character = Character::findOrFail($id);
+
+        if (Auth::id() !== $character->user_id) {
+            abort(403, 'Nincs jogosultságod szerkeszteni ezt a karaktert!');
+        }
+
+        return view('character.edit', ['character' => $character]);
     }
 
     /**
@@ -68,7 +75,45 @@ class CharacterController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request = $request->validate([
+            'name' => 'required|string',
+            'enemy' => 'boolean',
+            'defence' => 'required|integer|min:0|max:3',
+            'strength' => 'required|integer|min:0|max:20',
+            'accuracy' => 'required|integer|min:0|max:20',
+            'magic' => 'required|integer|min:0|max:20',
+
+        ], [
+            'name.required' => 'A név megadása kötelező!',
+            'defence.required' => 'A védelem megadása kötelező!',
+            'defence.integer' => 'A védelemnek egész számnak kell lennie!',
+            'defence.min' => 'A védelem legalább 0 lehet!',
+            'defence.max' => 'A védelem legfeljebb 3 lehet!',
+            'strength.required' => 'Az erő megadása kötelező!',
+            'strength.integer' => 'Az erőnek egész számnak kell lennie!',
+            'strength.min' => 'Az erő legalább 0 lehet!',
+            'strength.max' => 'Az erő legfeljebb 20 lehet!',
+            'accuracy.required' => 'A pontosság megadása kötelező!',
+            'accuracy.integer' => 'A pontosságnak egész számnak kell lennie!',
+            'accuracy.min' => 'A pontosság legalább 0 lehet!',
+            'accuracy.max' => 'A pontosság legfeljebb 20 lehet!',
+            'magic.required' => 'A varázserő megadása kötelező!',
+            'magic.integer' => 'A varázserőnek egész számnak kell lennie!',
+            'magic.min' => 'A varázserő legalább 0 lehet!',
+            'magic.max' => 'A varázserő legfeljebb 20 lehet!',
+
+        ]);
+            $character = Character::find($id);
+            $character->name = $request['name'];
+            $character->enemy = $request['enemy'];
+            $character->defence = $request['defence'];
+            $character->strength = $request['strength'];
+            $character->accuracy = $request['accuracy'];
+            $character->magic = $request['magic'];
+            $character->save();
+
+        return redirect()->route('characters.show', ['id' => $id]);
+
     }
 
     /**
