@@ -176,6 +176,11 @@ class CharacterController extends Controller
      */
     public function destroy(string $id)
     {
+        $character = Character::findOrFail($id);
+        if (Auth::id() !== $character->user_id) {
+            abort(403, 'Nincs jogosultságod törölni ezt a karaktert!');
+        }
+        $character->delete();
         return redirect()->route('characters');
     }
 }
