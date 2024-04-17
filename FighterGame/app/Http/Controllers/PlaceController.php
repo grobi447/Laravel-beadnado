@@ -86,7 +86,10 @@ public function store(Request $request)
      */
     public function edit(string $id)
     {
-        //
+        if (Auth::user()->admin !== 1) {
+            abort(403, 'Nincs jogosultságod a tartalom megtekintésére!');
+        }
+        return view('place.edit', ['place' => Place::find($id)]);
     }
 
     /**
@@ -94,7 +97,29 @@ public function store(Request $request)
      */
     public function update(Request $request, string $id)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string',
+            'imagename' => 'required|image',
+        ], [
+            'name.required' => 'A név megadása kötelező!',
+            'name.string' => 'A név csak szöveg lehet!',
+            'imagename.required' => 'A kép megadása kötelező!',
+            'imagename.image' => 'A kép formátuma nem megfelelő!',
+        ]);
+
+        if ($request->hasFile('imagename')) {
+            $file = $request->file('imagename');
+            $fname = $file->hashName();
+            Storage::disk('public')->put('images/' . $fname, $file->get());
+            $validated['imagename'] = $fname;
+        }
+
+        $place = Place::find($id);
+        $place->name = $validated['name'];
+        $place->imagename = $validated['imagename'];
+        $place->save();
+
+        return redirect()->route('places.index');
     }
 
     /**
@@ -102,6 +127,6 @@ public function store(Request $request)
      */
     public function destroy(string $id)
     {
-        //
+        
     }
 }

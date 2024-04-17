@@ -23,6 +23,8 @@ Route::get('match', [ContestController::class, 'index'])->name('matches')->middl
 Route::get('places', [PlaceController::class, 'index'])->name('places.index')->middleware('auth');
 Route::get('places/create', [PlaceController::class, 'create'])->name('places.create')->middleware('auth');
 Route::post('places/create', [PlaceController::class, 'store'])->name('places.store')->middleware('auth');
+Route::get('places/{id}/edit', [PlaceController::class, 'edit'])->name('places.edit')->middleware('auth');
+Route::put('places/{id}/edit', [PlaceController::class, 'update'])->name('places.update')->middleware('auth');
 Auth::routes();
 
 

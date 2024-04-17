@@ -31,6 +31,7 @@
                                                     @endif
                                                 </div>
                                             </div>
+                                            <a href="{{Route('places.edit', ['id' => $place->id])}}">Edit place</a>
                                         </div>
                                     </div>
                                 @endforeach
