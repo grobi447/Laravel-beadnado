@@ -15,7 +15,7 @@ class PlaceController extends Controller
         if (Auth::user()->admin !== 1) {
             abort(403, 'Nincs jogosultságod a tartalom megtekintésére!');
         }
-
+        
         return view('place.index', ['places' => $places]);
     }
 

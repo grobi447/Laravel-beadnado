@@ -61,7 +61,11 @@ class DatabaseSeeder extends Seeder
         $places = collect();
         $placesCount = rand(5, 10);
         for ($i = 0; $i < $placesCount; $i++) {
-            $place = Place::factory()->make();
+            $place = Place::factory()->create(
+                ['name' => fake()->word(),
+                'imagename' => 'default.png'
+                ]
+            );
             $place->save();
             $places->push($place);
         }

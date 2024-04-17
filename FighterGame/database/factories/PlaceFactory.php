@@ -17,8 +17,7 @@ class PlaceFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->word(),
-            'imagename' => fake()->word(),
+            'name' => fake()->word()
         ];
     }
 }
