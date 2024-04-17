@@ -100,7 +100,7 @@ class CharacterController extends Controller
             $opponent = $match->character->firstWhere('id', '!=', $character->id);
             return $opponent->name;
         });
-        return view('character.show', ['character' => $character, 'PlaceNames' => $PlaceNames, 'OpponentNames' => $OpponentNames]);
+        return view('character.show', ['character' => $character, 'PlaceNames' => $PlaceNames, 'OpponentNames' => $OpponentNames, 'matches' => $matches]);
     }
 
     /**

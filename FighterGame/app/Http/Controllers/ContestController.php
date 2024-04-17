@@ -12,19 +12,14 @@ class ContestController extends Controller
      */
     public function index()
     {
-        return view('match.index');
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create($id)
+    public function create()
     {
-        $character = Character::findOrFail($id);
 
-        if (Auth::id() !== $character->user_id) {
-        abort(403, 'Nincs jogosultságod meccset létrehozni ezzel a karakterrel');
-        }
 
         return view('match.create');
     }

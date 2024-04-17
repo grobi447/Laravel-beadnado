@@ -39,13 +39,13 @@
                                     <tr>
                                         <td>{{ $placeName }}</td>
                                         <td>{{ $OpponentNames[$index] }}</td>
-                                        <td> <a href="{{Route('matches.show', ['id' => $character->id]) }}">match details</a></td>
+                                        <td> <a href="{{Route('matches.show', ['id' => $matches[$index]->id]) }}">match details</a></td>
                                     </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
-                <a href="{{Route('matches.create', ['id' => $character->id]) }}">New Match</a>
+                <a href="{{Route('matches.create') }}">New Match</a>
                 <a href="{{Route('characters.edit', ['id' => $character->id])}}">Edit Character</a>
                 <a href="{{Route('characters.delete', ['id' => $character->id])}}">Delete Character</a>
             </div>

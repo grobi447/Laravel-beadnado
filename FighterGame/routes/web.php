@@ -16,9 +16,11 @@ Route::get('/characters/{id}/edit', [CharacterController::class, 'edit'])->name(
 Route::put('/characters/{id}/edit', [CharacterController::class, 'update'])->name('characters.update')->middleware('auth');
 Route::get('/characters/{id}/delete', [CharacterController::class, 'destroy'])->name('characters.delete')->middleware('auth');
 
-Route::get('match/{id}', [ContestController::class, 'show'])->name('matches.show')->middleware('auth');
 Route::get('match/create', [ContestController::class, 'create'])->name('matches.create')->middleware('auth');
-Route::get('match', [ContestController::class, 'index'])->name('matches')->middleware('auth');
+Route::post('match/create', [ContestController::class, 'store'])->name('matches.store')->middleware('auth');
+Route::get('match/{id}', [ContestController::class, 'show'])->name('matches.show')->middleware('auth');
+
+
 
 Route::get('places', [PlaceController::class, 'index'])->name('places.index')->middleware('auth');
 Route::get('places/create', [PlaceController::class, 'create'])->name('places.create')->middleware('auth');
