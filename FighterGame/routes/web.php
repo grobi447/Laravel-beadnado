@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\CharacterController;
 use App\Http\Controllers\ContestController;
+use App\Http\Controllers\PlaceController;
 
 Route::get('/', [HomeController::class, 'index']);
 
@@ -18,6 +19,8 @@ Route::get('/characters/{id}/delete', [CharacterController::class, 'destroy'])->
 Route::get('match/{id}', [ContestController::class, 'show'])->name('matches.show')->middleware('auth');
 Route::get('match/create', [ContestController::class, 'create'])->name('matches.create')->middleware('auth');
 Route::get('match', [ContestController::class, 'index'])->name('matches')->middleware('auth');
+
+Route::get('places', [PlaceController::class, 'index'])->name('places.index')->middleware('auth');
 Auth::routes();
 
 

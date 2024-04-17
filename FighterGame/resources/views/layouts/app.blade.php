@@ -61,6 +61,11 @@
                                     <a class="dropdown-item" href="{{ route('characters') }}">
                                         {{ __('Characters') }}
                                     </a>
+                                    @if (Auth::user()->admin)
+                                        <a class="dropdown-item" href="{{ route('places.index') }}">
+                                            {{ __('Places') }}
+                                        </a>
+                                    @endif
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
