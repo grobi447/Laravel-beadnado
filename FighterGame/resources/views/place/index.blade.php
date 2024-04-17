@@ -32,6 +32,7 @@
                                                 </div>
                                             </div>
                                             <a href="{{Route('places.edit', ['id' => $place->id])}}">Edit place</a>
+                                            <a href="{{Route('places.delete', ['id' => $place->id])}}">Delete place</a>
                                         </div>
                                     </div>
                                 @endforeach

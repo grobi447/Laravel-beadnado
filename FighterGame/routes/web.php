@@ -25,6 +25,7 @@ Route::get('places/create', [PlaceController::class, 'create'])->name('places.cr
 Route::post('places/create', [PlaceController::class, 'store'])->name('places.store')->middleware('auth');
 Route::get('places/{id}/edit', [PlaceController::class, 'edit'])->name('places.edit')->middleware('auth');
 Route::put('places/{id}/edit', [PlaceController::class, 'update'])->name('places.update')->middleware('auth');
+Route::get('places/{id}/delete', [PlaceController::class, 'destroy'])->name('places.delete')->middleware('auth');
 Auth::routes();
 
 

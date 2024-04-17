@@ -127,6 +127,11 @@ public function store(Request $request)
      */
     public function destroy(string $id)
     {
-        
+        if (Auth::user()->admin !== 1) {
+            abort(403, 'Nincs jogosultságod a tartalom megtekintésére!');
+        }
+        Storage::disk('public')->delete('images/' . Place::find($id)->imagename);
+        Place::destroy($id);
+        return redirect()->route('places.index');
     }
 }
