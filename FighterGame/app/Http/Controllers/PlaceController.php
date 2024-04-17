@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Place;
+
+
 class PlaceController extends Controller
 {
     /**
@@ -11,11 +15,11 @@ class PlaceController extends Controller
      */
     public function index()
     {
-        $places = \App\Models\Place::all();
+        $places = Place::all();
         if (Auth::user()->admin !== 1) {
             abort(403, 'Nincs jogosultságod a tartalom megtekintésére!');
         }
-        
+
         return view('place.index', ['places' => $places]);
     }
 
@@ -24,16 +28,50 @@ class PlaceController extends Controller
      */
     public function create()
     {
-        //
+        if (Auth::user()->admin !== 1) {
+            abort(403, 'Nincs jogosultságod a tartalom megtekintésére!');
+        }
+
+        return view('place.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
+
+
+public function store(Request $request)
+{
+    if (Auth::user()->admin !== 1) {
+        abort(403, 'Nincs jogosultságod a tartalom megtekintésére!');
     }
+
+    $validated = $request->validate([
+        'name' => 'required|string',
+        'imagename' => 'required|image',
+    ], [
+        'name.required' => 'A név megadása kötelező!',
+        'name.string' => 'A név csak szöveg lehet!',
+        'imagename.required' => 'A kép megadása kötelező!',
+        'imagename.image' => 'A kép formátuma nem megfelelő!',
+    ]);
+
+    if ($request->hasFile('imagename')) {
+        $file = $request->file('imagename');
+        $fname = $file->hashName();
+        Storage::disk('public')->put('images/' . $fname, $file->get());
+        $validated['imagename'] = $fname;
+    }
+
+    $place = new Place();
+    $place->name = $validated['name'];
+    $place->imagename = $validated['imagename'];
+    $place->save();
+
+    return redirect()->route('places.index');
+}
+
+
 
     /**
      * Display the specified resource.

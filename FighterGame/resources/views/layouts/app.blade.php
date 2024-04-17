@@ -62,6 +62,9 @@
                                         {{ __('Characters') }}
                                     </a>
                                     @if (Auth::user()->admin)
+                                    <a class="dropdown-item" href="{{ route('places.create') }}">
+                                        {{ __('New place') }}
+                                    </a>
                                         <a class="dropdown-item" href="{{ route('places.index') }}">
                                             {{ __('Places') }}
                                         </a>

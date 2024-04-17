@@ -15,25 +15,28 @@
                         @endif
                         <div class="container">
                             <div class="row ">
-                                @foreach($places as $place)
-                                <div class="col-md-6">
-                                    <!-- Ide jön a karakter specifikus tartalom -->
-                                    <div class="card">
-                                        <div class="card-header text-center">
-                                            {{ $place->name }}
-                                        </div>
-                                        <div class="card-body text-center">
-                                            <div class="container">
-
-                                                <img src="{{ asset('/images/' . $place->imagename) }}" class="img-fluid">
+                                @foreach ($places as $place)
+                                    <div class="col-md-6">
+                                        <!-- Ide jön a karakter specifikus tartalom -->
+                                        <div class="card">
+                                            <div class="card-header text-center">
+                                                {{ $place->name }}
+                                            </div>
+                                            <div class="card-body text-center">
+                                                <div class="container">
+                                                    @if (Storage::disk('public')->exists('images/' . $place->imagename))
+                                                        <img src="{{ asset('storage/images/' . $place->imagename) }}" class="img-fluid">
+                                                    @else
+                                                        <img src="{{ asset('images/' . $place->imagename) }}" class="img-fluid">
+                                                    @endif
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
                                 @endforeach
                             </div>
                         </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    @endsection
+        @endsection

@@ -21,6 +21,8 @@ Route::get('match/create', [ContestController::class, 'create'])->name('matches.
 Route::get('match', [ContestController::class, 'index'])->name('matches')->middleware('auth');
 
 Route::get('places', [PlaceController::class, 'index'])->name('places.index')->middleware('auth');
+Route::get('places/create', [PlaceController::class, 'create'])->name('places.create')->middleware('auth');
+Route::post('places/create', [PlaceController::class, 'store'])->name('places.store')->middleware('auth');
 Auth::routes();
 
 
