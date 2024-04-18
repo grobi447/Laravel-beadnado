@@ -57,7 +57,10 @@ class ContestController extends Controller
      */
     public function show(string $id)
     {
-        return view('match.show');
+        $match = Contest::find($id);
+        $place = Place::find($match->place_id);
+        
+        return view('match.show', ['place' => $place]);
     }
 
     /**
