@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Character;
+use App\Models\Contest;
+use App\Models\Place;
 class ContestController extends Controller
 {
     /**
@@ -20,8 +22,6 @@ class ContestController extends Controller
     public function create()
     {
 
-
-        return view('match.create');
     }
 
     /**
@@ -29,7 +29,27 @@ class ContestController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $characters = Character::all();
+        $places = Place::all();
+
+        if($characters->find($request->character_id)->admin){
+            $enemy = $characters->where('enemy', true)->random();
+        }
+        else{
+            $enemy = $characters->where('enemy', false)->random();
+        }
+
+        $Match = new Contest();
+        $history = [];
+        $json = json_encode($history);
+        $Match->user_id = Auth::id();
+        $Match->place_id = $places->random()->id;
+        $Match->win = null;
+        $Match->history = $json;
+        $Match->save();
+        $Match->character()->attach($request->character_id);
+        $Match->character()->attach($enemy->id);
+        return redirect()->route('matches.show', ['id' => $Match->id]);
     }
 
     /**

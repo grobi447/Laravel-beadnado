@@ -9,8 +9,7 @@ class Contest extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'win',
-        'history',
+        
     ];
     public function character(){
         return $this->belongsToMany(Character::class, 'characters__contests', 'contest_id', 'character_id')->withPivot('hero_hp', 'enemy_hp');

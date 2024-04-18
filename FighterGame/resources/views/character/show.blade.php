@@ -36,18 +36,25 @@
                         </thead>
                         <tbody>
                             @foreach ($PlaceNames as $index => $placeName)
-                                    <tr>
-                                        <td>{{ $placeName }}</td>
-                                        <td>{{ $OpponentNames[$index] }}</td>
-                                        <td> <a href="{{Route('matches.show', ['id' => $matches[$index]->id]) }}">match details</a></td>
-                                    </tr>
+                                <tr>
+                                    <td>{{ $placeName }}</td>
+                                    <td>{{ $OpponentNames[$index] }}</td>
+                                    <td> <a href="{{ Route('matches.show', ['id' => $matches[$index]->id]) }}">match
+                                            details</a></td>
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
-                <a href="{{Route('matches.create') }}">New Match</a>
-                <a href="{{Route('characters.edit', ['id' => $character->id])}}">Edit Character</a>
-                <a href="{{Route('characters.delete', ['id' => $character->id])}}">Delete Character</a>
+                <form method="POST" action="{{ route('matches.store') }}" novalidate enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="character_id" value="{{ $character->id }}">
+                    <button type="submit" class="btn btn-primary">
+                        {{ __('Create new contest') }}
+                    </button>
+                </form>
+                <a href="{{ Route('characters.edit', ['id' => $character->id]) }}">Edit Character</a>
+                <a href="{{ Route('characters.delete', ['id' => $character->id]) }}">Delete Character</a>
             </div>
         </div>
     </div>
