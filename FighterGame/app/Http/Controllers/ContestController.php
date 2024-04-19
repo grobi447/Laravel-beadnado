@@ -80,7 +80,7 @@ class ContestController extends Controller
         $att = $match->character[0];
         $deff = $match->character[1];
         $action = $request->input('action');
-
+        //attacker attack
         if ($action == 'melee') {
             $new_hp = $deff->pivot->hero_hp - ($att->strength * 0.7 + $att->accuracy * 0.1 + $att->magic * 0.1) - $deff->defence;
         } else if ($action == 'ranged') {
@@ -93,33 +93,38 @@ class ContestController extends Controller
         $deff->pivot->hero_hp = $new_hp;
         $att->pivot->save();
         $deff->pivot->save();
-
         if ($new_hp <= 0) {
             $deff->pivot->hero_hp = 0;
+            $att->pivot->enemy_hp = 0;
             $deff->pivot->save();
+            $att->pivot->save();
             $match->win = 1;
+            $match->save();
         } else {
-            //enemy attack
+            //deffender attack
             $actions = ['melee', 'ranged', 'magic'];
             $enemyAction = $actions[array_rand($actions)];
             if ($enemyAction == 'melee') {
-                $new_hp = $att->pivot->hero_hp - ($deff->strength * 0.7 + $deff->accuracy * 0.1 + $deff->magic * 0.1) - $att->defence;
+                $new_hp2 = $att->pivot->hero_hp - ($deff->strength * 0.7 + $deff->accuracy * 0.1 + $deff->magic * 0.1) - $att->defence;
             } else if ($enemyAction == 'ranged') {
-                $new_hp = $att->pivot->hero_hp - ($deff->strength * 0.1 + $deff->accuracy * 0.7 + $deff->magic * 0.1) - $att->defence;
+                $new_hp2 = $att->pivot->hero_hp - ($deff->strength * 0.1 + $deff->accuracy * 0.7 + $deff->magic * 0.1) - $att->defence;
             } else {
-                $new_hp = $att->pivot->hero_hp - ($deff->strength * 0.1 + $deff->accuracy * 0.1 + $deff->magic * 0.7) - $att->defence;
+                $new_hp2 = $att->pivot->hero_hp - ($deff->strength * 0.1 + $deff->accuracy * 0.1 + $deff->magic * 0.7) - $att->defence;
             }
-            $att->pivot->hero_hp = $new_hp;
-            $deff->pivot->enemy_hp = $new_hp;
+            $att->pivot->hero_hp = $new_hp2;
+            $deff->pivot->enemy_hp = $new_hp2;
             $att->pivot->save();
             $deff->pivot->save();
-            if ($new_hp <= 0) {
+            if ($new_hp2 <= 0) {
                 $att->pivot->hero_hp = 0;
+                $deff->pivot->enemy_hp = 0;
                 $att->pivot->save();
-                $match = 0;
+                $deff->pivot->save();
+                $match->win = 0;
+                $match->save();
             }
         }
-        $match->save();
+
       return redirect()->route('matches.show', ['id' => $match->id]);
     }
 

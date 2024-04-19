@@ -9,7 +9,7 @@
                 {{ $place->name }}
             </div>
             <div class="card-body text-center">
-                @if($match->win == null)
+                @if($match->win === null)
                 <div class="row">
                     <div class="col text-center">
                         <a href="{{ route('matches.attack', ['id' => $match->id, 'action' => 'melee']) }}">Melee</a>
