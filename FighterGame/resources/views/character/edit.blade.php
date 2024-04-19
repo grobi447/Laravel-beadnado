@@ -6,7 +6,6 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">Edit {{ $character->name }}</div>
-
                     <div class="card-body">
                         <form method="POST" action="{{ route('characters.update', $character) }}" novalidate
                             enctype="multipart/form-data">

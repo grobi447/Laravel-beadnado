@@ -8,16 +8,10 @@
                         <h2>Places</h2>
                     </div>
                     <div class="card-body">
-                        @if (session('status'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
-                            </div>
-                        @endif
                         <div class="container">
                             <div class="row ">
                                 @foreach ($places as $place)
                                     <div class="col-md-6">
-                                        <!-- Ide jön a karakter specifikus tartalom -->
                                         <div class="card">
                                             <div class="card-header text-center">
                                                 {{ $place->name }}

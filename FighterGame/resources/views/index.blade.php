@@ -8,12 +8,6 @@
                         <h1>Főoldal</h1>
                     </div>
                     <div class="card-body">
-                        @if (session('status'))
-                            <div class="alert alert-success" role="alert">
-                                {{ session('status') }}
-                            </div>
-                        @endif
-
                         <p>A játék egy egyszerűsített harcolós játék lesz, amelyben a játékos egy karaktert irányít, és
                             küzdeni fog különböző ellenfelek ellen. A harc körökre osztott lesz, ahol mind a játékos, mind
                             az ellenfél támadni és védekezni tud. A cél az ellenfél életerejének nullára csökkentése,

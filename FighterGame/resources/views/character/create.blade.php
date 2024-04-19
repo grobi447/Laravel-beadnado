@@ -6,7 +6,6 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">Create new character</div>
-
                     <div class="card-body">
                         <form method="POST" action="{{ route('characters.create') }}" novalidate
                             enctype="multipart/form-data">
@@ -19,7 +18,7 @@
                                 <div class="col-md-6">
                                     <input id="name" type="text"
                                         class="form-control @error('name') is-invalid @enderror" name="name"
-                                        value="{{old('name')}}" required autocomplete="name" autofocus>
+                                        value="{{ old('name') }}" required autocomplete="name" autofocus>
 
                                     @error('name')
                                         <span class="invalid-feedback" role="alert">
@@ -54,7 +53,7 @@
                                 <div class="col-md-6">
                                     <input id="defence " type="number"
                                         class="form-control @error('defence') is-invalid @enderror" name="defence"
-                                        value="{{old('defence')}}">
+                                        value="{{ old('defence') }}">
 
                                     @error('defence')
                                         <span class="invalid-feedback" role="alert">
@@ -71,7 +70,7 @@
                                 <div class="col-md-6">
                                     <input id="strength" type="number"
                                         class="form-control @error('strength') is-invalid @enderror" name="strength"
-                                        value="{{old('strength')}}">
+                                        value="{{ old('strength') }}">
 
                                     @error('strength')
                                         <span class="invalid-feedback" role="alert">
@@ -87,7 +86,7 @@
                                 <div class="col-md-6">
                                     <input id="accuracy" type="number"
                                         class="form-control @error('accuracy') is-invalid @enderror" name="accuracy"
-                                        value="{{old('accuracy')}}">
+                                        value="{{ old('accuracy') }}">
 
                                     @error('accuracy')
                                         <span class="invalid-feedback" role="alert">
@@ -103,7 +102,7 @@
                                 <div class="col-md-6">
                                     <input id="magic" type="number"
                                         class="form-control @error('magic') is-invalid @enderror" name="magic"
-                                        value="{{old('magic')}}">
+                                        value="{{ old('magic') }}">
 
                                     @error('magic')
                                         <span class="invalid-feedback" role="alert">

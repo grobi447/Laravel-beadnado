@@ -11,25 +11,13 @@ use App\Models\Place;
 class ContestController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
     {
+        if (Auth::id() !== Character::find($request->character_id)->user_id) {
+            abort(403, 'Nincs jogosultságod ezzel a karakterel meccset létrehozni!');
+        }
         $characters = Character::all();
         $places = Place::all();
 
@@ -58,27 +46,30 @@ class ContestController extends Controller
     public function show(string $id)
     {
         $match = Contest::find($id);
+        $att = $match->character[0];
+        $deff = $match->character[1];
+
+        if (Auth::id() !== $att->user_id && Auth::id() !== $deff->user_id) {
+            abort(403, 'Nincs jogosultságod megtekinteni ezt a meccset!');
+        }
+
+        $match = Contest::find($id);
         $place = Place::find($match->place_id);
 
         return view('match.show', ['place' => $place, 'match' => $match]);
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
     /**
      * Update the specified resource in storage.
      */
     public function update(string $id, Request $request)
     {
+
         $match = Contest::find($id);
         $att = $match->character[0];
         $deff = $match->character[1];
+        if (Auth::id() !== $att->user_id && Auth::id() !== $deff->user_id) {
+            abort(403, 'Nincs jogosultságod támadni ezzel a karakterrel');
+        }
         $history = json_decode($match->history, true);
         $action = $request->input('action');
         //attacker attack
@@ -139,14 +130,6 @@ class ContestController extends Controller
             }
         }
 
-      return redirect()->route('matches.show', ['id' => $match->id]);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        return redirect()->route('matches.show', ['id' => $match->id]);
     }
 }
