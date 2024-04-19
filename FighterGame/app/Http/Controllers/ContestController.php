@@ -79,6 +79,7 @@ class ContestController extends Controller
         $match = Contest::find($id);
         $att = $match->character[0];
         $deff = $match->character[1];
+        $history = json_decode($match->history, true);
         $action = $request->input('action');
         //attacker attack
         if ($action == 'melee') {
@@ -88,7 +89,13 @@ class ContestController extends Controller
         } else {
             $new_hp = $deff->pivot->hero_hp - ($att->strength * 0.1 + $att->accuracy * 0.1 + $att->magic * 0.7) - $deff->defence;
         }
-
+        $history[] = [
+            'character_name' => $att->name,
+            'action' => $action,
+            'damage' => $deff->pivot->hero_hp - $new_hp
+        ];
+        $match->history = json_encode($history);
+        $match->save();
         $att->pivot->enemy_hp = $new_hp;
         $deff->pivot->hero_hp = $new_hp;
         $att->pivot->save();
@@ -111,6 +118,13 @@ class ContestController extends Controller
             } else {
                 $new_hp2 = $att->pivot->hero_hp - ($deff->strength * 0.1 + $deff->accuracy * 0.1 + $deff->magic * 0.7) - $att->defence;
             }
+            $history[] = [
+                'character_name' => $deff->name,
+                'action' => $enemyAction,
+                'damage' => $att->pivot->hero_hp - $new_hp2
+            ];
+            $match->history = json_encode($history);
+            $match->save();
             $att->pivot->hero_hp = $new_hp2;
             $deff->pivot->enemy_hp = $new_hp2;
             $att->pivot->save();
