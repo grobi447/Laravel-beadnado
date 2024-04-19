@@ -15,6 +15,10 @@ class ContestController extends Controller
      */
     public function store(Request $request)
     {
+        if (Place::all()->count() == 0) {
+            abort(403, 'Nincs helyszín létrehozva!');
+        }
+
         if (Auth::id() !== Character::find($request->character_id)->user_id) {
             abort(403, 'Nincs jogosultságod ezzel a karakterel meccset létrehozni!');
         }
