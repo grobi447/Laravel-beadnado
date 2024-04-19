@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Character;
 use App\Models\Contest;
 use App\Models\Place;
+
 class ContestController extends Controller
 {
     /**
@@ -32,10 +33,9 @@ class ContestController extends Controller
         $characters = Character::all();
         $places = Place::all();
 
-        if($characters->find($request->character_id)->admin){
+        if ($characters->find($request->character_id)->admin) {
             $enemy = $characters->where('enemy', true)->random();
-        }
-        else{
+        } else {
             $enemy = $characters->where('enemy', false)->random();
         }
 
@@ -74,9 +74,53 @@ class ContestController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(string $id, Request $request)
     {
-        //
+        $match = Contest::find($id);
+        $att = $match->character[0];
+        $deff = $match->character[1];
+        $action = $request->input('action');
+
+        if ($action == 'melee') {
+            $new_hp = $deff->pivot->hero_hp - ($att->strength * 0.7 + $att->accuracy * 0.1 + $att->magic * 0.1) - $deff->defence;
+        } else if ($action == 'ranged') {
+            $new_hp = $deff->pivot->hero_hp - ($att->strength * 0.1 + $att->accuracy * 0.7 + $att->magic * 0.1) - $deff->defence;
+        } else {
+            $new_hp = $deff->pivot->hero_hp - ($att->strength * 0.1 + $att->accuracy * 0.1 + $att->magic * 0.7) - $deff->defence;
+        }
+
+        $att->pivot->enemy_hp = $new_hp;
+        $deff->pivot->hero_hp = $new_hp;
+        $att->pivot->save();
+        $deff->pivot->save();
+
+        if ($new_hp <= 0) {
+            $deff->pivot->hero_hp = 0;
+            $deff->pivot->save();
+            $match->win = 1;
+        } else {
+            //enemy attack
+            $actions = ['melee', 'ranged', 'magic'];
+            $enemyAction = $actions[array_rand($actions)];
+            if ($enemyAction == 'melee') {
+                $new_hp = $att->pivot->hero_hp - ($deff->strength * 0.7 + $deff->accuracy * 0.1 + $deff->magic * 0.1) - $att->defence;
+            } else if ($enemyAction == 'ranged') {
+                $new_hp = $att->pivot->hero_hp - ($deff->strength * 0.1 + $deff->accuracy * 0.7 + $deff->magic * 0.1) - $att->defence;
+            } else {
+                $new_hp = $att->pivot->hero_hp - ($deff->strength * 0.1 + $deff->accuracy * 0.1 + $deff->magic * 0.7) - $att->defence;
+            }
+            $att->pivot->hero_hp = $new_hp;
+            $deff->pivot->enemy_hp = $new_hp;
+            $att->pivot->save();
+            $deff->pivot->save();
+            if ($new_hp <= 0) {
+                $att->pivot->hero_hp = 0;
+                $att->pivot->save();
+                $match = 0;
+            }
+        }
+        $match->save();
+      return redirect()->route('matches.show', ['id' => $match->id]);
     }
 
     /**

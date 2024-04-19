@@ -19,7 +19,7 @@ Route::get('/characters/{id}/delete', [CharacterController::class, 'destroy'])->
 
 Route::post('match/create', [ContestController::class, 'store'])->name('matches.store')->middleware('auth');
 Route::get('match/{id}', [ContestController::class, 'show'])->name('matches.show')->middleware('auth');
-
+Route::get('match/{id}/action' , [ContestController::class, 'update'])->name('matches.attack')->middleware('auth');
 
 Route::get('places', [PlaceController::class, 'index'])->name('places.index')->middleware('auth');
 Route::get('places/create', [PlaceController::class, 'create'])->name('places.create')->middleware('auth');
